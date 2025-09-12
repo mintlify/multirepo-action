@@ -12,9 +12,9 @@ This setup involves two types of repositories:
 - **subrepositories**: The other repos that will be aggregated
   into the base repo.
 
-Each subrepository must contain a `mint.json` with a valid
+Each subrepository must contain a `docs.json` with a valid
 [navigation field](https://mintlify.com/docs/settings/navigation#folders)
-representing the pages in that repository. All other `mint.json`
+representing the pages in that repository. All other `docs.json`
 settings will be taken from the base repo.
 
 ## Inputs
@@ -32,7 +32,7 @@ have the following properties:
 - `owner`: **(required)** the owner/org of the subrepo
 - `repo`: **(required)** the name of the subrepo
 - `ref`: the branch/ref at which to check out the subrepo
-- `subdirectory`: path to the directory containing the subrepo's `mint.json`
+- `subdirectory`: path to the directory containing the subrepo's `docs.json`
 
 ### target-branch (required)
 
@@ -40,7 +40,7 @@ The branch to which the complete documentation will be pushed
 
 ### subdirectory
 
-Path to the directory containing the main `mint.json`
+Path to the directory containing the main `docs.json`
 
 ### force
 

@@ -14,7 +14,7 @@ inputs:
     required: false
     default: main
   subdirectory:
-    description: Path to the directory containing the main mint.json
+    description: Path to the directory containing the main docs.json
     required: false
     default: '.'
   force:
