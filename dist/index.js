@@ -32,6 +32,42 @@ const prependPrefix = (group, prefix) => {
 const mergeNavigation = (main, sub, prefix) => {
     return [...main, ...sub.map((group) => prependPrefix(group, prefix))];
 };
+const mergeDocsNavigation = (main, sub, prefix) => {
+    const merged = { ...main };
+    // Merge groups if they exist
+    if (sub.groups) {
+        const prefixedGroups = sub.groups.map((group) => prependPrefix(group, prefix));
+        merged.groups = [...(merged.groups || []), ...prefixedGroups];
+    }
+    // Merge pages if they exist
+    if (sub.pages) {
+        const prefixedPages = sub.pages.map(page => `${prefix}/${page}`);
+        merged.pages = [...(merged.pages || []), ...prefixedPages];
+    }
+    // For more complex structures (languages, versions, tabs, etc.)
+    // we'll add the subrepo content to the main groups section
+    if (sub.languages || sub.versions || sub.tabs || sub.dropdowns || sub.anchors) {
+        const fallbackGroup = {
+            group: prefix,
+            pages: []
+        };
+        // Extract pages from complex navigation structures
+        if (sub.languages) {
+            sub.languages.forEach(lang => {
+                if (lang.pages)
+                    fallbackGroup.pages.push(...lang.pages.map(p => `${prefix}/${p}`));
+                if (lang.groups)
+                    fallbackGroup.pages.push(...lang.groups.flatMap(g => g.pages).filter((p) => typeof p === 'string').map(p => `${prefix}/${p}`));
+            });
+        }
+        // Similar logic for other complex structures...
+        // For now, we'll add them as a single group
+        if (fallbackGroup.pages.length > 0) {
+            merged.groups = [...(merged.groups || []), fallbackGroup];
+        }
+    }
+    return merged;
+};
 const checkoutBranch = async (branch) => {
     try {
         await execOrThrow('git', ['ls-remote', '--heads', '--exit-code', 'origin', branch]);
@@ -51,7 +87,8 @@ try {
     const force = core.getBooleanInput('force');
     process.chdir(subdirectory);
     await checkoutBranch(targetBranch);
-    const mainConfig = JSON.parse(await readFile('mint.json', 'utf-8'));
+    const mainConfigText = await readFile('docs.json', 'utf-8');
+    const mainConfig = JSON.parse(mainConfigText);
     resetToken = await setToken(token);
     for (const { owner, repo, ref, subdirectory: subrepoSubdirectory } of repos) {
         await io.rmRF(repo);
@@ -69,10 +106,11 @@ try {
         else {
             await io.rmRF(`${repo}/.git`);
         }
-        const subConfig = JSON.parse(await readFile(path.join(repo, 'mint.json'), 'utf-8'));
-        mainConfig.navigation = mergeNavigation(mainConfig.navigation, subConfig.navigation, repo);
+        const subConfigText = await readFile(path.join(repo, 'docs.json'), 'utf-8');
+        const subConfig = JSON.parse(subConfigText);
+        mainConfig.navigation = mergeDocsNavigation(mainConfig.navigation, subConfig.navigation, repo);
     }
-    await writeFile('mint.json', JSON.stringify(mainConfig, null, 2));
+    await writeFile('docs.json', JSON.stringify(mainConfig, null, 2));
     await execOrThrow('git', ['add', '.']);
     try {
         await exec.exec('git', ['diff-index', '--quiet', '--cached', 'HEAD', '--']) !== 0;
