@@ -136,13 +136,13 @@ export const mergeNavigationAsProducts = (
     Array.isArray(sub.navigation?.pages) &&
     (sub.navigation.pages?.length ?? 0) > 0;
 
-  console.log(
+  core.info(
     `[mergeProducts] repo="${prefix}" product="${sub.name}" hasTabs=${hasTabs} hasGroups=${hasGroups} hasPages=${hasPages}`
   );
 
   // If nothing recognizable is present, return main unchanged (but ensure products exists)
   if (!hasTabs && !hasGroups && !hasPages) {
-    console.log(
+    core.info(
       `[mergeProducts] Skipping merge for repo="${prefix}" (no tabs/groups/pages found)`
     );
     return {
@@ -181,7 +181,7 @@ export const mergeNavigationAsProducts = (
     ...(main.navigation || {}),
     products: [...(main.navigation?.products || []), productEntry],
   };
-  console.log(
+  core.info(
     `[mergeProducts] After merge for repo="${prefix}", products.length=${
       merged.products?.length ?? 0
     }`
@@ -190,7 +190,7 @@ export const mergeNavigationAsProducts = (
 };
 
 const checkoutBranch = async (branch: string) => {
-  console.log(`[checkoutBranch] Checking out branch="${branch}"`); //REMOVEME
+  core.info(`[checkoutBranch] Checking out branch="${branch}"`); //REMOVEME
   try {
     await execOrThrow("git", [
       "ls-remote",
@@ -222,7 +222,7 @@ try {
   const mainConfig = JSON.parse(mainConfigText) as DocsConfig;
 
   resetToken = await setToken(token);
-  console.log(`[main] about to iterate over repos=${repos.length}`); //REMOVEME
+  core.info(`[main] about to iterate over repos=${repos.length}`); //REMOVEME
   for (const { owner, repo, ref, subdirectory: subrepoSubdirectory } of repos) {
     await io.rmRF(repo);
 
@@ -243,7 +243,7 @@ try {
 
     const subConfigText = await readFile(path.join(repo, "docs.json"), "utf-8");
     const subConfig = JSON.parse(subConfigText) as DocsConfig;
-    console.log(
+    core.info(
       `[merge] Merging repo="${repo}" name="${
         subConfig.name
       }" navKeys=${Object.keys(subConfig.navigation ?? {}).join(",")}`
@@ -253,7 +253,7 @@ try {
       subConfig,
       repo
     );
-    console.log(
+    core.info(
       `[merge] Post-merge products.length=${
         mainConfig.navigation.products?.length ?? 0
       }`
@@ -271,7 +271,7 @@ try {
       "HEAD",
       "--",
     ])) !== 0;
-    console.log("No changes detected, skipping...");
+    core.info("No changes detected, skipping...");
   } catch {
     await execOrThrow("git", ["config", "user.name", "Mintie Bot"]);
     await execOrThrow("git", ["config", "user.email", "aws@mintlify.com"]);
