@@ -1,0 +1,214 @@
+{
+  "theme": "mint",
+  "name": "Modaic Docs",
+  "colors": {
+    "primary": "#8800c2",
+    "light": "#cc8c98"
+  },
+  "logo": {
+    "light": "./images/logo.svg",
+    "dark": "./images/logo.svg",
+    "href": "https://www.modaic.dev/"
+  },
+  "appearance": {
+    "default": "dark",
+    "strict": false
+  },
+  "navigation": {
+    "products": [
+      {
+        "product": "Modaic Docs",
+        "tabs": [
+          {
+            "tab": "Documentation",
+            "icon": "book",
+            "groups": [
+              {
+                "group": "Getting Started",
+                "pages": [
+                  "docs1/index"
+                ]
+              },
+              {
+                "group": "DSPy Programs",
+                "pages": [
+                  "docs1/guides/programs/precompiled_program",
+                  "docs1/guides/programs/auto_program"
+                ]
+              },
+              {
+                "group": "Retrievers",
+                "pages": [
+                  "docs1/guides/retrievers/retrievers"
+                ]
+              }
+            ]
+          },
+          {
+            "tab": "SDK Reference",
+            "icon": "square-terminal",
+            "groups": [
+              {
+                "group": "Programs",
+                "pages": [
+                  "docs1/sdk_reference/modaic/precompiled",
+                  "docs1/sdk_reference/modaic/auto"
+                ]
+              }
+            ]
+          },
+          {
+            "tab": "DSPy Guide",
+            "icon": "puzzle",
+            "iconType": "thin",
+            "groups": [
+              {
+                "group": "Get Started",
+                "pages": [
+                  "docs1/dspy_guide/get_started/quickstart"
+                ]
+              },
+              {
+                "group": "Core Components",
+                "pages": [
+                  "docs1/dspy_guide/core_components/signature",
+                  {
+                    "group": "Modules",
+                    "pages": [
+                      "docs1/dspy_guide/core_components/modules/predict",
+                      "docs1/dspy_guide/core_components/modules/react"
+                    ]
+                  },
+                  "docs1/dspy_guide/core_components/programs",
+                  "docs1/dspy_guide/core_components/lm",
+                  "docs1/dspy_guide/core_components/history",
+                  "docs1/dspy_guide/core_components/tools",
+                  "docs1/dspy_guide/core_components/output"
+                ]
+              },
+              {
+                "group": "Optimization",
+                "pages": [
+                  "docs1/dspy_guide/optimization/index",
+                  {
+                    "group": "Optimizers",
+                    "pages": [
+                      "docs1/dspy_guide/optimization/optimizers/GEPA"
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "tab": "DSPy IntelliSense",
+            "icon": "brain-circuit",
+            "pages": [
+              "docs1/dspy-intellisense"
+            ]
+          }
+        ]
+      },
+      {
+        "product": "Retrievers Docs",
+        "tabs": [
+          {
+            "tab": "Documentation",
+            "icon": "book",
+            "groups": [
+              {
+                "group": "Get Started",
+                "pages": [
+                  "docs2/index"
+                ]
+              },
+              {
+                "group": "Context",
+                "pages": [
+                  "docs2/guides/context/context_class_intro",
+                  "docs2/guides/context/custom_context",
+                  {
+                    "group": "Context Library",
+                    "pages": [
+                      "docs2/guides/context/context_library/index",
+                      "docs2/guides/context/context_library/text",
+                      "docs2/guides/context/context_library/table"
+                    ]
+                  }
+                ]
+              },
+              {
+                "group": "Databases",
+                "pages": [
+                  "docs2/guides/databases/vdb_alchemy",
+                  "docs2/guides/databases/sql_db",
+                  "docs2/guides/databases/graph_db"
+                ]
+              },
+              {
+                "group": "Retrievers",
+                "pages": [
+                  "docs2/guides/retrievers/retrievers"
+                ]
+              },
+              {
+                "group": "Storage",
+                "pages": [
+                  "docs2/guides/storage/file_stores"
+                ]
+              }
+            ]
+          },
+          {
+            "tab": "SDK Reference",
+            "icon": "square-terminal",
+            "groups": [
+              {
+                "group": "Context",
+                "pages": [
+                  "docs2/sdk_reference/retrievers/context/base",
+                  "docs2/sdk_reference/retrievers/context/table",
+                  "docs2/sdk_reference/retrievers/context/text",
+                  "docs2/sdk_reference/retrievers/context/dtype_mapping"
+                ]
+              },
+              {
+                "group": "Indexing",
+                "pages": [
+                  "docs2/sdk_reference/retrievers/indexing"
+                ]
+              },
+              {
+                "group": "Databases",
+                "pages": [
+                  {
+                    "group": "Vector Database",
+                    "pages": [
+                      "docs2/sdk_reference/retrievers/databases/vector_database/vector_database",
+                      {
+                        "group": "Vendors",
+                        "pages": [
+                          "docs2/sdk_reference/retrievers/databases/vector_database/vendors/milvus"
+                        ]
+                      },
+                      "docs2/sdk_reference/retrievers/query_language"
+                    ]
+                  },
+                  "docs2/sdk_reference/retrievers/databases/sql_database",
+                  "docs2/sdk_reference/retrievers/databases/graph_database"
+                ]
+              },
+              {
+                "group": "Context Storage",
+                "pages": [
+                  "docs2/sdk_reference/retrievers/storage/file_store",
+                  "docs2/sdk_reference/retrievers/storage/pickle_store"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

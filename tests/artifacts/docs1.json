@@ -1,0 +1,106 @@
+{
+  "theme": "mint",
+  "name": "Modaic Docs",
+  "colors": {
+    "primary": "#8800c2",
+    "light": "#cc8c98"
+  },
+  "logo": {
+    "light": "./images/logo.svg",
+    "dark": "./images/logo.svg",
+    "href": "https://www.modaic.dev/"
+  },
+  "appearance": {
+    "default": "dark",
+    "strict": false
+  },
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Documentation",
+        "icon": "book",
+        "groups": [
+          {
+            "group": "Getting Started",
+            "pages": ["index"]
+          },
+          {
+            "group": "DSPy Programs",
+            "pages": [
+              "guides/programs/precompiled_program",
+              "guides/programs/auto_program"
+            ]
+          },
+          {
+            "group": "Retrievers",
+            "pages": ["guides/retrievers/retrievers"]
+          }
+        ]
+      },
+      {
+        "tab": "SDK Reference",
+        "icon": "square-terminal",
+        "groups": [
+          {
+            "group": "Programs",
+            "pages": [
+              "sdk_reference/modaic/precompiled",
+              "sdk_reference/modaic/auto"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "DSPy Guide",
+        "icon": "puzzle",
+        "iconType": "thin",
+        "groups": [
+          {
+            "group": "Get Started",
+            "pages": ["dspy_guide/get_started/quickstart"]
+          },
+          {
+            "group": "Core Components",
+            "pages": [
+              "dspy_guide/core_components/signature",
+              {
+                "group": "Modules",
+                "pages": [
+                  "dspy_guide/core_components/modules/predict",
+                  "dspy_guide/core_components/modules/react"
+                ]
+              },
+              "dspy_guide/core_components/programs",
+              "dspy_guide/core_components/lm",
+              "dspy_guide/core_components/history",
+              "dspy_guide/core_components/tools",
+              "dspy_guide/core_components/output"
+            ]
+          },
+          {
+            "group": "Optimization",
+            "pages": [
+              "dspy_guide/optimization/index",
+              {
+                "group": "Optimizers",
+                "pages": ["dspy_guide/optimization/optimizers/GEPA"]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "DSPy IntelliSense",
+        "icon": "brain-circuit",
+        "pages": ["dspy-intellisense"]
+      }
+    ],
+    "menu": [
+      {
+        "label": "GitHub",
+        "href": "https://github.com/modaic-ai/modaic"
+      }
+    ]
+  },
+  "$schema": "https://mintlify.com/docs.json"
+}

@@ -1,0 +1,115 @@
+{
+  "theme": "mint",
+  "name": "Retrievers Docs",
+  "colors": {
+    "primary": "#8800c2",
+    "light": "#cc8c98"
+  },
+  "logo": {
+    "light": "./images/logo.svg",
+    "dark": "./images/logo.svg",
+    "href": "https://www.modaic.dev/"
+  },
+  "appearance": {
+    "default": "dark",
+    "strict": false
+  },
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Documentation",
+        "icon": "book",
+        "groups": [
+          {
+            "group": "Get Started",
+            "pages": ["index"]
+          },
+          {
+            "group": "Context",
+            "pages": [
+              "guides/context/context_class_intro",
+              "guides/context/custom_context",
+              {
+                "group": "Context Library",
+                "pages": [
+                  "guides/context/context_library/index",
+                  "guides/context/context_library/text",
+                  "guides/context/context_library/table"
+                ]
+              }
+            ]
+          },
+          {
+            "group": "Databases",
+            "pages": [
+              "guides/databases/vdb_alchemy",
+              "guides/databases/sql_db",
+              "guides/databases/graph_db"
+            ]
+          },
+          {
+            "group": "Retrievers",
+            "pages": ["guides/retrievers/retrievers"]
+          },
+          {
+            "group": "Storage",
+            "pages": ["guides/storage/file_stores"]
+          }
+        ]
+      },
+      {
+        "tab": "SDK Reference",
+        "icon": "square-terminal",
+        "groups": [
+          {
+            "group": "Context",
+            "pages": [
+              "sdk_reference/retrievers/context/base",
+              "sdk_reference/retrievers/context/table",
+              "sdk_reference/retrievers/context/text",
+              "sdk_reference/retrievers/context/dtype_mapping"
+            ]
+          },
+          {
+            "group": "Indexing",
+            "pages": ["sdk_reference/retrievers/indexing"]
+          },
+          {
+            "group": "Databases",
+            "pages": [
+              {
+                "group": "Vector Database",
+                "pages": [
+                  "sdk_reference/retrievers/databases/vector_database/vector_database",
+                  {
+                    "group": "Vendors",
+                    "pages": [
+                      "sdk_reference/retrievers/databases/vector_database/vendors/milvus"
+                    ]
+                  },
+                  "sdk_reference/retrievers/query_language"
+                ]
+              },
+              "sdk_reference/retrievers/databases/sql_database",
+              "sdk_reference/retrievers/databases/graph_database"
+            ]
+          },
+          {
+            "group": "Context Storage",
+            "pages": [
+              "sdk_reference/retrievers/storage/file_store",
+              "sdk_reference/retrievers/storage/pickle_store"
+            ]
+          }
+        ]
+      }
+    ],
+    "menu": [
+      {
+        "label": "GitHub",
+        "href": "https://github.com/modaic-ai/retrievers"
+      }
+    ]
+  },
+  "$schema": "https://mintlify.com/docs.json"
+}

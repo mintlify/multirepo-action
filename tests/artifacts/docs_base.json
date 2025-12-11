@@ -1,0 +1,18 @@
+{
+  "theme": "mint",
+  "name": "Modaic Docs",
+  "colors": {
+    "primary": "#8800c2",
+    "light": "#cc8c98"
+  },
+  "logo": {
+    "light": "./images/logo.svg",
+    "dark": "./images/logo.svg",
+    "href": "https://www.modaic.dev/"
+  },
+  "appearance": {
+    "default": "dark",
+    "strict": false
+  },
+  "navigation": {}
+}
