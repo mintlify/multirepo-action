@@ -254,7 +254,6 @@ try {
   }
 
   await writeFile("docs.json", JSON.stringify(mainConfig, null, 2));
-  await writeFile("docs.txt", JSON.stringify(mainConfig, null, 2));
 
   await execOrThrow("git", ["add", "."]);
   try {
