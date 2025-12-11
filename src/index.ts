@@ -190,6 +190,7 @@ export const mergeNavigationAsProducts = (
 };
 
 const checkoutBranch = async (branch: string) => {
+  console.log(`[checkoutBranch] Checking out branch="${branch}"`); //REMOVEME
   try {
     await execOrThrow("git", [
       "ls-remote",
@@ -221,6 +222,7 @@ try {
   const mainConfig = JSON.parse(mainConfigText) as DocsConfig;
 
   resetToken = await setToken(token);
+  console.log(`[main] about to iterate over repos=${repos.length}`); //REMOVEME
   for (const { owner, repo, ref, subdirectory: subrepoSubdirectory } of repos) {
     await io.rmRF(repo);
 
