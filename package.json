@@ -7,6 +7,7 @@
   "scripts": {
     "clean": "rm -rf dist",
     "build": "tsc",
+    "test": "npm run build && node dist/tests/test_merge_docs.js",
     "prepublishOnly": "npm run clean && npm run build && rm -rf node_modules && npm install --omit=dev"
   },
   "keywords": [],
