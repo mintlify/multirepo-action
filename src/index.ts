@@ -55,6 +55,29 @@ type Repo = {
   subdirectory?: string;
 }
 
+// GitHub owner/repo names: alphanumeric, hyphens, dots, underscores only
+const GITHUB_NAME_RE = /^[a-zA-Z0-9._-]+$/;
+
+function validateRepoInput(repo: Repo): void {
+  if (!GITHUB_NAME_RE.test(repo.owner)) {
+    throw new Error(`Invalid owner name: ${repo.owner}`);
+  }
+  if (!GITHUB_NAME_RE.test(repo.repo)) {
+    throw new Error(`Invalid repo name: ${repo.repo}`);
+  }
+  if (repo.ref && !GITHUB_NAME_RE.test(repo.ref)) {
+    throw new Error(`Invalid ref: ${repo.ref}`);
+  }
+}
+
+function safePath(baseDir: string, untrustedSegment: string): string {
+  const resolved = path.resolve(baseDir, untrustedSegment);
+  if (!resolved.startsWith(baseDir + path.sep) && resolved !== baseDir) {
+    throw new Error(`Path traversal detected: ${untrustedSegment} resolves outside ${baseDir}`);
+  }
+  return resolved;
+}
+
 const execOrThrow: (...args: Parameters<typeof exec.exec>) => Promise<void> = async (...args) => {
   const exitCode = await exec.exec(...args);
   if (exitCode !== 0) throw Error(`error running command: ${args[0]} ${args[1]?.join(' ') ?? ''}`);
@@ -85,10 +108,6 @@ const prependPrefix = (group: NavigationGroup, prefix: string): NavigationGroup 
     )),
   };
 };
-
-const mergeNavigation = (main: Navigation, sub: Navigation, prefix: string) => {
-  return [...main, ...sub.map((group) => prependPrefix(group, prefix))];
-}
 
 const mergeDocsNavigation = (main: DocsNavigation, sub: DocsNavigation, prefix: string): DocsNavigation => {
   const merged = { ...main };
@@ -157,8 +176,14 @@ try {
   const mainConfig = JSON.parse(mainConfigText) as DocsConfig;
 
   resetToken = await setToken(token);
-  for (const { owner, repo, ref, subdirectory: subrepoSubdirectory } of repos) {
-    await io.rmRF(repo);
+  const baseDir = path.resolve('.');
+  for (const repoEntry of repos) {
+    const { owner, repo, ref, subdirectory: subrepoSubdirectory } = repoEntry;
+
+    validateRepoInput(repoEntry);
+
+    const repoDir = safePath(baseDir, repo);
+    await io.rmRF(repoDir);
 
     const args = ['clone', '--depth=1'];
     if (ref) args.push('--branch', ref);
@@ -167,15 +192,16 @@ try {
     await execOrThrow('git', args);
 
     if (subrepoSubdirectory) {
-      const tempDirName = 'temporary-docs-dir';
-      await io.mv(path.join(repo, subrepoSubdirectory), tempDirName);
-      await io.rmRF(repo);
-      await io.mv(tempDirName, repo);
+      const subDirPath = safePath(repoDir, subrepoSubdirectory);
+      const tempDirName = safePath(baseDir, 'temporary-docs-dir');
+      await io.mv(subDirPath, tempDirName);
+      await io.rmRF(repoDir);
+      await io.mv(tempDirName, repoDir);
     } else {
-      await io.rmRF(`${repo}/.git`);
+      await io.rmRF(path.join(repoDir, '.git'));
     }
 
-    const subConfigText = await readFile(path.join(repo, 'docs.json'), 'utf-8');
+    const subConfigText = await readFile(path.join(repoDir, 'docs.json'), 'utf-8');
     const subConfig = JSON.parse(subConfigText) as DocsConfig;
     mainConfig.navigation = mergeDocsNavigation(mainConfig.navigation, subConfig.navigation, repo);
   }
