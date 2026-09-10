@@ -89,7 +89,20 @@ const setToken = async (token: string) => {
   const headerPlaceholder = 'Authorization: basic ***';
   const headerValue = `Authorization: basic ${encodedToken}`;
   const headerKey = 'http.https://github.com/.extraheader';
-  const configPath = '.git/config';
+
+  // Resolve the repo config with an absolute path: the action may have
+  // already chdir'ed into the aggregation `subdirectory`, where a relative
+  // '.git/config' no longer points at the checked-out repo (and a worktree
+  // or submodule keeps its real git dir behind a .git file, not a folder).
+  let gitDir = '';
+  await execOrThrow('git', ['rev-parse', '--absolute-git-dir'], {
+    listeners: {
+      stdout: (data: Buffer) => {
+        gitDir += data.toString();
+      },
+    },
+  });
+  const configPath = path.join(gitDir.trim(), 'config');
 
   await execOrThrow('git', ['config', '--local', headerKey, headerPlaceholder]);
   const configString = await readFile(configPath, 'utf-8');
