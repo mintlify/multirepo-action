@@ -41,6 +41,17 @@ Move your parent repository's `docs.json` to `docs.base.json`. Put `sourceRef` e
 
 A `sourceRef` is replaced with the child's navigation array of the same kind. For example, a `sourceRef` in `tabs` is replaced with the child's `navigation.tabs`. A `sourceRef` in `pages` uses the child's `pages`, or its `groups` if it has no `pages`.
 
+A `sourceRef` can name a source by its repository (`acme/api`) or by its `destination` (`api`). Use the destination when one repository provides more than one doc set, since the repository name would match all of them. If a value matches both a destination and a repository, the destination wins.
+
+```json
+"products": [
+  { "product": "API", "icon": "server", "groups": [{ "sourceRef": "api" }] },
+  { "product": "Operations", "icon": "wrench", "groups": [{ "sourceRef": "api-ops" }] }
+]
+```
+
+Placing children with `sourceRef` lets the parent set each product's or tab's name, icon, and description.
+
 Sources without a `sourceRef` are appended to the base's top-level `products`, `tabs`, `anchors`, or `dropdowns`, named after the source's `name` or the child's `docs.json` `name`.
 
 ### 2. Add the multirepo config
@@ -64,6 +75,8 @@ sources:
     destination: legacy
     rewriteLinks: false      # copy content without rewriting links
 ```
+
+A repository can be listed more than once with a different `path` and `destination` for each doc set it holds. Reference those doc sets by destination in `sourceRef`.
 
 Each child needs its own `docs.json` with a `navigation` object, so a child can still be previewed on its own with `mint dev`. The child's top-level settings, like theme and colors, are ignored. Only `navigation`, `variables`, and `redirects` are merged.
 
