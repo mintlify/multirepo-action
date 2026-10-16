@@ -58,6 +58,59 @@ describe('assemble', () => {
     expect(result.redirects).toEqual([{ source: '/api/old', destination: '/api/new' }])
   })
 
+  it('matches a sourceRef by destination, so one repository can provide several doc sets', () => {
+    const ops = { name: 'Ops', navigation: { groups: [{ group: 'Runbooks', pages: ['runbook'] }] } }
+    const base: JsonObject = {
+      navigation: {
+        products: [
+          { product: 'API', icon: 'server', groups: [{ sourceRef: 'api' }] },
+          { product: 'Operations', icon: 'wrench', groups: [{ sourceRef: '/api-ops/' }] },
+        ],
+      },
+    }
+    const result = assemble(base, [
+      { source: source('acme/api', 'api'), docs: sdk },
+      { source: source('acme/api', 'api-ops'), docs: ops },
+    ])
+    expect(result.navigation).toEqual({
+      products: [
+        { product: 'API', icon: 'server', groups: [{ group: 'JS', pages: ['api/js'] }] },
+        { product: 'Operations', icon: 'wrench', groups: [{ group: 'Runbooks', pages: ['api-ops/runbook'] }] },
+      ],
+    })
+  })
+
+  it('prefers a destination over a repository with the same name', () => {
+    const other = { navigation: { groups: [{ group: 'Other', pages: ['other'] }] } }
+    const base: JsonObject = {
+      navigation: {
+        tabs: [
+          { tab: 'SDK', groups: [{ sourceRef: 'sdk' }] },
+          { tab: 'Libraries', groups: [{ sourceRef: 'libraries' }] },
+        ],
+      },
+    }
+    const result = assemble(base, [
+      { source: source('acme/sdk', 'libraries'), docs: other },
+      { source: source('acme/js', 'sdk'), docs: sdk },
+    ])
+    expect(result.navigation).toEqual({
+      tabs: [
+        { tab: 'SDK', groups: [{ group: 'JS', pages: ['sdk/js'] }] },
+        { tab: 'Libraries', groups: [{ group: 'Other', pages: ['libraries/other'] }] },
+      ],
+    })
+  })
+
+  it('asks for a destination when a repository sourceRef matches several doc sets', () => {
+    const base: JsonObject = { navigation: { groups: [{ sourceRef: 'acme/api' }] } }
+    const children = [
+      { source: source('acme/api', 'api'), docs: sdk },
+      { source: source('acme/api', 'api-ops'), docs: sdk },
+    ]
+    expect(() => assemble(base, children)).toThrow(/matches more than one source \(api, api-ops\)\. Use a destination/)
+  })
+
   it.each([
     [{ navigation: { pages: [{ sourceRef: 'acme/missing' }] } }, /does not match/],
     [{ navigation: { tabs: [{ sourceRef: 'acme/sdk' }] } }, /has no "tabs"/],

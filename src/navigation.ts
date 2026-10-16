@@ -76,12 +76,19 @@ export function assemble(base: JsonObject, children: Child[]): JsonObject {
         if (!isObject(item) || typeof item.sourceRef !== 'string') return [resolve(item, undefined, stack)]
         if (!container) throw new Error(`sourceRef "${item.sourceRef}" must be inside a navigation array`)
         const ref = item.sourceRef
-        const match = navs.filter((n) => matchesRepo(ref, n.child.source.repo))
-        if (match.length !== 1) throw new Error(match.length ? `sourceRef "${ref}" is ambiguous, use the full repository path` : `sourceRef "${ref}" does not match any configured source`)
+        // A destination names one doc set exactly, so it wins over a repository name, which can match several
+        const byDestination = navs.filter((n) => n.child.source.destination === ref.replace(/^\/+|\/+$/g, ''))
+        const match = byDestination.length ? byDestination : navs.filter((n) => matchesRepo(ref, n.child.source.repo))
+        if (match.length > 1) {
+          const options = match.map((n) => n.child.source.destination).join(', ')
+          throw new Error(`sourceRef "${ref}" matches more than one source (${options}). Use a destination instead, for example { "sourceRef": "${match[0]!.child.source.destination}" }`)
+        }
+        if (!match.length) throw new Error(`sourceRef "${ref}" does not match any configured source`)
         const target = match[0]!
-        if (stack.includes(target.child.source.repo)) throw new Error(`sourceRef cycle: ${[...stack, target.child.source.repo].join(' -> ')}`)
+        const id = target.child.source.destination
+        if (stack.includes(id)) throw new Error(`sourceRef cycle: ${[...stack, id].join(' -> ')}`)
         target.used = true
-        return resolve(itemsFor(container, target.nav, ref), container, [...stack, target.child.source.repo]) as Json[]
+        return resolve(itemsFor(container, target.nav, ref), container, [...stack, id]) as Json[]
       })
     }
     if (!isObject(node)) return node
